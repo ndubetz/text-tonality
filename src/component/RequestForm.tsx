@@ -1,9 +1,10 @@
-    import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface FormState {
     targetText: string
     melodicPattern: string
     rootNote: string
+    output: string
 }
 
 class RequestForm extends React.Component<any, FormState> {
@@ -12,7 +13,8 @@ class RequestForm extends React.Component<any, FormState> {
         this.state = {
             targetText: "Buffalo Bilbo Baggins",
             melodicPattern: "Natural minor scale",
-            rootNote: "C#/Db"
+            rootNote: "C#/Db",
+            output: ""
         };
         console.log("This where a server call would be made to populate melodic patterns dropdown");
         this.submit = this.submit.bind(this);
@@ -21,7 +23,7 @@ class RequestForm extends React.Component<any, FormState> {
         this.updateRootNote = this.updateRootNote.bind(this);
     }
 
-    populateMelodicPatterns(){
+    populateMelodicPatterns() {
         const patterns = [
             "Major scale",
             "Natural minor scale",
@@ -35,7 +37,7 @@ class RequestForm extends React.Component<any, FormState> {
         });
     }
 
-    populateRootNotes(){
+    populateRootNotes() {
         const notes = ["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"];
         return notes.map((n) => {
             return (
@@ -44,46 +46,50 @@ class RequestForm extends React.Component<any, FormState> {
         });
     }
 
-    updateTargetText(event: ChangeEvent<HTMLTextAreaElement>){
-        this.setState({ ...this.state, targetText: event.target.value});
+    updateTargetText(event: ChangeEvent<HTMLTextAreaElement>) {
+        this.setState({ ...this.state, targetText: event.target.value });
     }
-    
-    updateMelodicPattern(event: any){
-        this.setState({ ...this.state, melodicPattern: event.target.value});
+
+    updateMelodicPattern(event: any) {
+        this.setState({ ...this.state, melodicPattern: event.target.value });
     }
-    
-    updateRootNote(event: any){
-        this.setState({ ...this.state, rootNote: event.target.value});
+
+    updateRootNote(event: any) {
+        this.setState({ ...this.state, rootNote: event.target.value });
     }
 
     submit() {
-        alert(`I will be a server call someday with target text ${this.state.targetText} melodic pattern ${this.state.melodicPattern} and root note ${this.state.rootNote}`);
+        this.setState({ ...this.state, output: `Target text: ${this.state.targetText} melodic pattern: ${this.state.melodicPattern} and root note: ${this.state.rootNote}` });
     }
 
     render() {
         return (
             <div>
-                WAH WAH WEE WAH
+                Text to Tonal Notes Generator
                 <div>
-                    <form onSubmit={this.submit}>
-                        <div>
-                            Text to transform:
-                            <textarea value={this.state.targetText} onChange={this.updateTargetText}/>
-                        </div>
-                        <div>
-                            Melodic Pattern:
-                            <select value={this.state.melodicPattern} onChange={this.updateMelodicPattern}>
-                                {this.populateMelodicPatterns()}
-                            </select>
-                        </div>
-                        <div>
-                            Root Note:
-                            <select value={this.state.rootNote} onChange={this.updateRootNote}>
-                                {this.populateRootNotes()}
-                            </select>
-                        </div>
-                        <input type="submit" value="Generate" />
-                    </form>
+                    <div>
+                        Text to transform:
+                        <textarea value={this.state.targetText} onChange={this.updateTargetText} />
+                    </div>
+                    <div>
+                        Melodic Pattern:
+                        <select value={this.state.melodicPattern} onChange={this.updateMelodicPattern}>
+                            {this.populateMelodicPatterns()}
+                        </select>
+                    </div>
+                    <div>
+                        Root Note:
+                        <select value={this.state.rootNote} onChange={this.updateRootNote}>
+                            {this.populateRootNotes()}
+                        </select>
+                    </div>
+                    <button onClick={this.submit}>Generate</button>
+                </div>
+                <div>
+                    Output:
+                    <div id="output">
+                        {this.state.output}
+                    </div>
                 </div>
             </div>
         );
